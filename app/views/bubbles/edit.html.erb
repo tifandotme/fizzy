@@ -1,5 +1,5 @@
 <%= turbo_frame_tag @bubble, :edit do %>
-  <%= form_with model: @bubble, class: "flex flex-column gap full-width", data: { controller: "form" } do | form | %>
+  <%= form_with model: @bubble, class: "flex flex-column gap full-width", data: { controller: "form" } do |form| %>
     <%= form.label :title, class: "flex flex-column justify-center align-center" do %>
       <%= form.text_area :title, class: "input input--textara txt-align-center full-width borderless",
           required: true, rows: 5, autofocus: true, placeholder: "Name it…",

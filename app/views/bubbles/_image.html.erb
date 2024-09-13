@@ -2,7 +2,7 @@
   <%= image_tag bubble.image.attached? ? bubble.image : "", data: { upload_preview_target: "image" } %>
 </div>
 
-<%= form_with model: bubble, data: { controller: "form" } do | form | %>
+<%= form_with model: bubble, data: { controller: "form" } do |form| %>
   <div class="bubble__bubble bubble__meta bubble__attachment">
     <% if bubble.image.attached? %>
       <%= tag.label class: "btn btn--plain", style: "--btn-icon-size: 3em; margin-block-start: -0.5em; margin-inline-end: -0.2em", data: { action: "click->upload-preview#clear click->form#submit", upload_preview_target: "button" } do %>

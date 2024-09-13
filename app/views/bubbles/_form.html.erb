@@ -1,4 +1,4 @@
-<%= form_with model: bubble, class: "flex flex-column gap full-width" do | form | %>
+<%= form_with model: bubble, class: "flex flex-column gap full-width" do |form| %>
   <%= form.label :title, class: "flex flex-column justify-start align-start" do %>
     <%= form.text_field :title, class: "input full-width", required: true, placeholder: "Name it…" %>
   <% end %>
@@ -7,7 +7,7 @@
     <legend class="for-screen-reader">Color</legend>
 
     <div class="flex align-center gap">
-      <% Bubble.colors.keys.each do | color | %>
+      <% Bubble.colors.keys.each do |color| %>
         <label class="btn btn--circle txt-medium" style="--btn-background: <%= color -%>" >
           <%= form.radio_button :color, color %>
           <%= image_tag "check.svg", aria: { hidden: "true" }, size: 24, class: "checked" %>

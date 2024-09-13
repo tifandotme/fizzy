@@ -1,6 +1,6 @@
 <div class="bubble__perma flex justify-center center">
   <div class="bubble" style="view-transition-name: bubble-<%= @bubble.id -%>; --bubble-color: <%= @bubble.color %>; <%= bubble_size(@bubble) %> <%= bubble_rotation(@bubble) %>">
-    <%= form_with model: @bubble, class: "flex flex-column gap full-width" do | form | %>
+    <%= form_with model: @bubble, class: "flex flex-column gap full-width" do |form| %>
       <h1 class="bubble__title">
         <%= form.text_area :title, class: "input full-width borderless", required: true, placeholder: "Name it…", rows: 4, autofocus: true %>
       </h1>
