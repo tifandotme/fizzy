@@ -1,6 +1,6 @@
 <% @page_title = @bubble.title %>
 
-<% @filter ||= Current.user.filters.first %>
+<% @filter ||= Current.user.filters.first || Filter.persist!({}) %>
 
 <% content_for :header do %>
   <nav>
