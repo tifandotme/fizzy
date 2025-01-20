@@ -1,10 +1,21 @@
 <%= turbo_stream_from Current.user, :notifications %>
 
-<%= tag.div id: "notification-tray", class: "notification-tray flex flex-column gap", data: { turbo_permanent: true } do %>
+<%= tag.dialog id: "notification-tray", class: "notification-tray flex flex-column gap unpad borderless",
+      data: { controller: "dialog", turbo_permanent: true, dialog_modal_value: false, dialog_target: "dialog", action: "keydown.esc@document->dialog#close click@document->dialog#closeOnClickOutside" } do %>
   <%=  turbo_frame_tag("notifications", src: notifications_tray_path) %>
 
-  <%= link_to notifications_path, class: "btn flex-item-justify-start" do %>
-    <%= image_tag "bell.svg", aria: { hidden: true }, size: 24 %>
-    <span class="for-screen-reader">See all notifications</span>
-  <% end %>
+  <div class="flex align-center gap-half justify-space-between pad txt-small">
+    <%= link_to notifications_path, class: "btn" do %>
+      <%= image_tag "bell.svg", aria: { hidden: true }, size: 24 %>
+      <span>See all notifications</span>
+    <% end %>
+
+    <button class="btn">
+      Mark all as read
+    </button>
+  </div>
+
+  <button class="notification-tray__expander borderless unpad fill-transparent" data-action="dialog#toggle">
+    <span class="for-screen-reader">Expand notifications stack</span>
+  </button>
 <% end %>
