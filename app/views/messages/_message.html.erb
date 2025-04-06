@@ -1,1 +1,5 @@
-<%= render message.messageable %>
+<% cache message do %>
+  <%# Template Dependency: event_summaries/event_summary %>
+  <%# Template Dependency: comments/comment %>
+  <%= render partial: message.messageable.to_partial_path, object: message.messageable %>
+<% end %>

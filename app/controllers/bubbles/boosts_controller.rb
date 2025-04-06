@@ -1,4 +1,4 @@
-class BoostsController < ApplicationController
+class Bubbles::BoostsController < ApplicationController
   include BubbleScoped
 
   def create

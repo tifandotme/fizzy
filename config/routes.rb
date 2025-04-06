@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resource :pin
       resource :watch
       resources :assignments
+      resources :boosts
       resources :taggings
     end
   end
@@ -39,7 +40,6 @@ Rails.application.routes.draw do
     end
 
     resources :bubbles do
-      resources :boosts
       resources :comments do
         resources :reactions, module: :comments
       end
