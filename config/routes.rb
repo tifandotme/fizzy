@@ -18,6 +18,10 @@ Rails.application.routes.draw do
     resources :cards
   end
 
+  namespace :cards do
+    resources :previews
+  end
+
   resources :cards do
     scope module: :cards do
       resource :engagement
@@ -39,10 +43,6 @@ Rails.application.routes.draw do
         resources :reactions, module: :comments
       end
     end
-  end
-
-  namespace :cards do
-    resources :previews
   end
 
 
