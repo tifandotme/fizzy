@@ -11,7 +11,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "destroy" do
     assert_difference -> { User.active.count }, -1 do
-      delete user_url(users(:david))
+      delete user_path(users(:david))
     end
 
     assert_redirected_to users_path
@@ -21,10 +21,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "non-admins cannot perform actions" do
     sign_in_as :jz
 
-    put user_url(users(:david)), params: { user: { role: "admin" } }
+    put user_path(users(:david)), params: { user: { role: "admin" } }
     assert_response :forbidden
 
-    delete user_url(users(:david))
+    delete user_path(users(:david))
     assert_response :forbidden
   end
 end
