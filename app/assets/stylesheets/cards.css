@@ -22,10 +22,6 @@
     .avatar {
       --avatar-size: 2.75em;
     }
-
-    @media (prefers-color-scheme: dark) {
-      --border-color: var(--color-ink-medium);
-    }
   }
 
   .card--golden.card--doing {
