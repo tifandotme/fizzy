@@ -135,11 +135,9 @@
 
     .comment__content {
       background-image: repeating-linear-gradient(
-        45deg,
-        var(--color-canvas),
-        var(--color-canvas) 1px,
-        var(--color-ink-lightest) 1px,
-        var(--color-ink-lightest) 0.5em
+        45deg in srgb,
+        var(--color-canvas) 0 1px,
+        var(--color-ink-lightest) 1px 10px
       );
     }
 
