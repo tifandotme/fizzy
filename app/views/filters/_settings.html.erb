@@ -12,7 +12,7 @@
     <% end %>
 
     <% if any_filters?(filter) %>
-      <%= link_to cards_path(filter.as_params.except(:assignee_ids, :assignment_status, :card_ids, :creator_ids, :stage_ids, :tag_ids, :terms)), class: "btn btn--remove txt-x-small" do %>
+      <%= link_to cards_path(filter.as_params.except(:assignee_ids, :assignment_status, :card_ids, :creator_ids, :stage_ids, :tag_ids, :terms, :indexed_by)), class: "btn btn--remove txt-x-small" do %>
         <%= icon_tag "close" %>
         <span class="for-screen-reader">Clear all</span>
       <% end %>
