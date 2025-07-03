@@ -14,6 +14,6 @@ module ActiveStorageControllerExtensions
   end
 end
 
-Rails.application.config.after_initialize do
+Rails.application.config.to_prepare do
   ActiveStorage::BaseController.include ActiveStorageControllerExtensions
 end
