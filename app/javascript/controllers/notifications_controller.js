@@ -54,7 +54,6 @@ export default class extends Controller {
       .subscribe({ userVisibleOnly: true, applicationServerKey: this.#vapidPublicKey })
       .then(subscription => {
         this.#syncPushSubscription(subscription)
-        this.dispatch("ready")
       })
   }
 
