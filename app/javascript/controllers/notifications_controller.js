@@ -22,7 +22,7 @@ export default class extends Controller {
 
   async attemptToSubscribe() {
     if (this.#allowed) {
-      const registration = await this.#serviceWorkerRegistration || await this.#registerServiceWorker()
+      const registration = await this.#getServiceWorkerRegistration() || await this.#registerServiceWorker()
 
       switch(Notification.permission) {
         case "denied":  { console.log("Notification.permission: denied"); break }
@@ -36,11 +36,12 @@ export default class extends Controller {
 
   async isEnabled() {
     if (this.#allowed) {
-      const registration = await this.#serviceWorkerRegistration
+      const registration = await this.#getServiceWorkerRegistration()
       const existingSubscription = await registration?.pushManager?.getSubscription()
 
       return Notification.permission == "granted" && registration && existingSubscription
     } else {
+      console.log("Not alllowed")
       return false
     }
   }
@@ -49,12 +50,12 @@ export default class extends Controller {
     return navigator.serviceWorker && window.Notification
   }
 
-  get #serviceWorkerRegistration() {
-    return navigator.serviceWorker.getRegistration("/service-worker.js", { scope: window.location.pathname.split('/')[1]})
+  async #getServiceWorkerRegistration() {
+    return navigator.serviceWorker.getRegistration("/service-worker.js", { scope: "/" })
   }
 
   #registerServiceWorker() {
-    return navigator.serviceWorker.register("/service-worker.js", { scope: window.location.pathname.split('/')[1]})
+    return navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
   }
 
   async #subscribe(registration) {
