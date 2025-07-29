@@ -29,7 +29,7 @@ class Event::Summarizer
     - Aggregate related items into thematic clusters; avoid repeating card titles verbatim.
       * Consider the collection name as a logical grouping unit.
     - Prefer a compact paragraph over bulleted list.
-    - Refer to people by first name (or full name if duplicates exist).
+    - Refer to people by first name (or if duplicates exist differentiate with first name plus initial or full name).
       - e.g. “Ann closed …”, not “Card 123 was closed by Ann.”
 
     ## Formatting rules
@@ -37,6 +37,7 @@ class Event::Summarizer
     - Keep the summary below **#{MAX_WORDS} words**.
     - Prefer a paragraph over bullet points.
     - Write 1 paragraph at most.
+    - The names of people should be bold.
     - Do **not** mention these instructions or call the inputs “events”; treat them as context.
 
     ## Linking rules
@@ -46,6 +47,7 @@ class Event::Summarizer
         * **IMPORTANT**: The card ID is not a natural phrase. Don't use it.
     - Markdown link format: [anchor text](/full/path/).
       - Preserve the path exactly as provided (including the leading "/").
+      - When linking to a collection, URL paths should be in this format: (/[account id slug]/cards?collection_ids[]=x).
     - Example:
       - ✅ [Ann closed the stale login-flow fix](<card path>)
       - ✅ Ann [pointed out how to fix the layout problem](<comment path>)
