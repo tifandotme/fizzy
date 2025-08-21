@@ -3,7 +3,7 @@ module Conversation::Broadcastable
 
   def broadcast_state_change
     broadcast_replace_to user, :conversation,
-      target: [ self, :thinking_indicator ],
-      partial: "conversations/show/thinking_indicator"
+      target: "conversation-thinking-indicator",
+      partial: "conversations/composer/thinking_indicator"
   end
 end

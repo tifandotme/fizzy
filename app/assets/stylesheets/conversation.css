@@ -82,5 +82,6 @@
     max-inline-size: 80ch;
     overflow-y: auto;
     padding: var(--block-space) calc(var(--block-space-double) + var(--btn-size));
+    padding-block-end: 10em;
   }
 }

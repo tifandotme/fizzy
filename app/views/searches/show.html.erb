@@ -1,24 +1,22 @@
 <%= turbo_frame_tag "search", target: :_top do %>
   <div class="search__header">
-    <button class="btn txt-x-small" data-action="bar#closeModal:prevent">
+    <button class="btn txt-x-small" data-action="bar#reset">
       <%= icon_tag "remove-med" %>
       <span class="for-screen-reader">Close</span>
     </button>
   </div>
 
   <section class="search">
-    <% if @query_terms.present? %>
-      <div class="search__results">
-        <% if @search_results.none? %>
-          <div class="search__empty">
-            Nothing found
-          </div>
-        <% end %>
+    <div class="search__results">
+      <% if @search_results.none? %>
+        <div class="search__empty">
+          Nothing found
+        </div>
+      <% end %>
 
-        <ul class="search__list">
-          <%= render partial: "searches/result", collection: @search_results %>
-        </ul>
-      </div>
-    <% end%>
+      <ul class="search__list">
+        <%= render partial: "searches/result", collection: @search_results %>
+      </ul>
+    </div>
   </section>
 <% end %>

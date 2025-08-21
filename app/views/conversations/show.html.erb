@@ -1,15 +1,15 @@
 <%= turbo_frame_tag "conversation" do %>
   <%= turbo_stream_from Current.user, :conversation %>
+
   <div class="conversation">
     <div class="conversation__header">
-      <button class="btn txt-x-small" data-action="bar#closeModal:prevent">
+      <button class="btn txt-x-small" data-action="bar#reset">
         <%= icon_tag "remove-med" %>
         <span class="for-screen-reader">Close</span>
       </button>
     </div>
+
     <%= turbo_frame_tag dom_id(@conversation, :messages_container), src: conversation_messages_path, target: "_top" %>
-    <%= render partial: "conversations/show/thinking_indicator", locals: { conversation: @conversation } %>
-    <%= render partial: "composer" %>
   </div>
 <% end %>
 
