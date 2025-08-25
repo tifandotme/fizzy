@@ -44,7 +44,7 @@
     }
   }
 
-  .fizzy-menu__hotkeys {
+  .fizzy-dialog__hotkeys {
     --gap: 8px;
 
     align-items: center;

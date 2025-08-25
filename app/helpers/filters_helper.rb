@@ -16,7 +16,7 @@ module FiltersHelper
   end
 
   def filter_place_menu_item(path, label, icon)
-    tag.li class: "popup__group", data: { filter_target: "item", navigable_list_target: "item" } do
+    tag.li class: "popup__group", id: "filter-place-#{label.parameterize}", data: { filter_target: "item", navigable_list_target: "item" } do
       concat icon_tag(icon)
       concat(link_to(path, class: "popup__item btn") do
         concat tag.span(label, class: "overflow-ellipsis")
