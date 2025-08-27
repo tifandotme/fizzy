@@ -91,4 +91,19 @@ class Notification::BundleTest < ActiveSupport::TestCase
     bundle.reload
     assert bundle.delivered?
   end
+
+  test "deliver_all don't deliver bundles that are not due" do
+    @user.notifications.create!(source: events(:logo_published), creator: @user)
+    bundle = @user.notification_bundles.pending.last
+
+    bundle.update!(ends_at: 1.minute.from_now)
+
+    perform_enqueued_jobs do
+      Notification::Bundle.deliver_all
+    end
+
+    bundle.reload
+    assert bundle.pending?
+  end
+
 end
