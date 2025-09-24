@@ -209,7 +209,7 @@
   --color-considering: oklch(var(--lch-blue-medium));
 
   /* Colors: Cards */
-  --color-card-default: oklch(var(--lch-ink-darker));
+  --color-card-default: oklch(var(--lch-blue-dark));
   --color-card-complete: var(--color-ink-darker);
   --color-card-1: oklch(var(--lch-ink-medium));
   --color-card-2: oklch(var(--lch-uncolor-medium));

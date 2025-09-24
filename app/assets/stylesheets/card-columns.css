@@ -484,6 +484,10 @@
   .cards--on-deck {
     --column-color: var(--color-ink-lighter);
 
+    .card {
+      --card-color: var(--color-card-complete) !important;
+    }
+
     .bubble {
       display: none !important;
     }
