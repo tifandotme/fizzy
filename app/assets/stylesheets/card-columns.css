@@ -96,7 +96,7 @@
 
     .bubble {
       inset-inline-start: 100%;
-      translate: -60% -60%;
+      translate: -90% -40%;
     }
 
     @media (any-hover: hover) {
@@ -177,7 +177,7 @@
 
       /* Progress */
       &:after {
-        background: var(--column-color);
+        background: var(--card-color);
         block-size: calc(var(--column-width-collapsed) + var(--card-count) * var(--progress-increment));
         border-radius: 99rem;
         content: "";
@@ -367,7 +367,7 @@
 
     .bubble {
       inset-inline-start: 100%;
-      translate: -60% -60%;
+      translate: -90% -40%;
     }
 
     @media (any-hover: hover) {
@@ -466,12 +466,6 @@
       @media (min-width: 640px) {
         --text-xx-large: 1.6em;
       }
-
-      &:nth-child(1n) { rotate: -1deg; }
-      &:nth-child(1) { rotate: 0deg; }
-      &:nth-child(2n) { rotate: 1deg; }
-      &:nth-child(3n) { rotate: -0.5deg; }
-      &:nth-child(4n) { rotate: 0.5deg; }
     }
 
     .card__collection {
@@ -547,6 +541,12 @@
 
     .card {
       --card-color: var(--color-card-complete) !important;
+    }
+
+    &.cards.is-collapsed {
+      .cards__expander:after {
+        background: var(--column-color);
+      }
     }
 
     .bubble {
