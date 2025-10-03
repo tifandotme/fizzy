@@ -103,11 +103,26 @@
     }
   }
 
-  .filter__terms {
+  .filter__terms:is(.input) {
     --input-background: var(--color-canvas);
+    --input-border-radius: 5em;
+    --input-padding: 0.5em 2.3em 0.5em 1.3em;
 
-    .filters:not(.filters--expanded) & {
-      min-inline-size: 40ch;
+    inline-size: 22ch;
+    min-inline-size: 22ch;
+
+    .filters:not(.filters--expanded, .filters--has-filters-set) & {
+      margin-inline-end: calc((var(--btn-size) + var(--inline-space-half) + 0.25em) * -1);
+    }
+  }
+
+  .filter-toggle {
+    .filters:not(.filters--expanded, .filters--has-filters-set) & {
+      --btn-background: transparent;
+      --btn-border-size: 0;
+
+      transform: translateX(calc(var(--inline-space-half) * -1));
+      position: relative;
     }
   }
 
