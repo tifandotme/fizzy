@@ -84,6 +84,10 @@ cmd_start() {
   local fizzy_services=$(get_fizzy_services)
   local first_fizzy=$(echo "$fizzy_services" | head -n 1)
 
+  # Set UID and GID for Docker user mapping
+  export DOCKER_UID=$(id -u)
+  export DOCKER_GID=$(id -g)
+
   # Get GitHub token from gh CLI
   echo "Getting GitHub token from gh CLI..."
   export GITHUB_TOKEN=$(gh auth token)

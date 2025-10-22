@@ -21,7 +21,7 @@ COPY Gemfile Gemfile.lock .ruby-version ./
 COPY lib/bootstrap.rb ./lib/bootstrap.rb
 COPY gems ./gems/
 RUN --mount=type=secret,id=GITHUB_TOKEN --mount=type=cache,id=fizzy-devbundle-${RUBY_VERSION},sharing=locked,target=/devbundle \
-    gem install bundler && \
+    gem install bundler foreman && \
     BUNDLE_PATH=/devbundle BUNDLE_GITHUB__COM="$(cat /run/secrets/GITHUB_TOKEN):x-oauth-basic" bundle install && \
     cp -a /devbundle/. "$BUNDLE_PATH"/ && \
     bundle clean --force
@@ -32,7 +32,8 @@ FROM registry.37signals.com/basecamp/beamer:vfs AS beamer
 # Final stage
 FROM base
 
-# Copy beamer
+# Copy beamer into /usr/local because /rails is mounted as a volume and will overwrite anything
+# there.
 COPY --from=beamer /home/beamer/bin/beamer.so /usr/local/lib/beamer/beamer.so
 COPY --from=beamer /usr/local/bin/beamer /usr/local/bin/beamer
 
