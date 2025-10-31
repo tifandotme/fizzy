@@ -17,7 +17,7 @@ class Membership < UntenantedRecord
 
   def account_name
     ApplicationRecord.with_tenant(tenant) { Account.sole.name }
-  rescue ActiveRecord::Tenanted::TenantDoesNotExistError
+  rescue ActiveRecord::Tenanted::TenantDoesNotExistError, ActiveRecord::RecordNotFound
     nil
   end
 
