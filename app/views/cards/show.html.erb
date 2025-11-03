@@ -11,6 +11,7 @@
   </div>
 <% end %>
 
+<%= turbo_stream_from @card %>
 <%= turbo_stream_from @card, :activity %>
 
 <div data-controller="beacon lightbox" data-beacon-url-value="<%= card_reading_path(@card) %>">
