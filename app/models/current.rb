@@ -8,9 +8,8 @@ class Current < ActiveSupport::CurrentAttributes
   def session=(value)
     super(value)
 
-    # # TODO:PLANB: not sure how to patch this up right now
-    # unless value.nil?
-    #   self.membership = identity.memberships.find_by(tenant: ApplicationRecord.current_tenant)
-    # end
+    if value.present? && Current.account.present?
+      self.membership = identity.memberships.find_by(tenant: Current.account.external_account_id)
+    end
   end
 end

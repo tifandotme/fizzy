@@ -42,32 +42,35 @@ module Searchable
 
   private
     def create_in_search_index
-      fields_sql = [ "rowid", *search_fields ].join(", ")
-      placeholders = ([ "?" ] * (search_fields.size + 1)).join(", ")
-      values = [ id, *search_values ]
+      # # TODO:PLANB: need to replace SQLite FTS
+      # fields_sql = [ "rowid", *search_fields ].join(", ")
+      # placeholders = ([ "?" ] * (search_fields.size + 1)).join(", ")
+      # values = [ id, *search_values ]
 
-      execute_sql_with_binds(
-        "insert into #{search_table}(#{fields_sql}) values (#{placeholders})",
-        *values
-      )
+      # execute_sql_with_binds(
+      #   "insert into #{search_table}(#{fields_sql}) values (#{placeholders})",
+      #   *values
+      # )
     end
 
     def update_in_search_index
-      transaction do
-        set_clause = search_fields.map { |field| "#{field} = ?" }.join(", ")
-        binds = search_values + [ id ]
+      # # TODO:PLANB: need to replace SQLite FTS
+      # transaction do
+      #   set_clause = search_fields.map { |field| "#{field} = ?" }.join(", ")
+      #   binds = search_values + [ id ]
 
-        updated = execute_sql_with_binds(
-          "update #{search_table} set #{set_clause} where rowid = ?",
-          *binds
-        )
+      #   updated = execute_sql_with_binds(
+      #     "update #{search_table} set #{set_clause} where rowid = ?",
+      #     *binds
+      #   )
 
-        create_in_search_index unless updated
-      end
+      #   create_in_search_index unless updated
+      # end
     end
 
     def remove_from_search_index
-      execute_sql_with_binds "delete from #{search_table} where rowid = ?", id
+      # # TODO:PLANB: need to replace SQLite FTS
+      # execute_sql_with_binds "delete from #{search_table} where rowid = ?", id
     end
 
     def execute_sql_with_binds(*statement)
