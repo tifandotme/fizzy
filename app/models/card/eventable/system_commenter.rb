@@ -8,7 +8,7 @@ class Card::Eventable::SystemCommenter
   def comment
     return unless comment_body.present?
 
-    card.comments.create! creator: User.system, body: comment_body, created_at: event.created_at
+    card.comments.create! creator: card.account.system_user, body: comment_body, created_at: event.created_at
   end
 
   private
