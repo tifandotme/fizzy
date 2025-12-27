@@ -24,6 +24,6 @@ jobs:
       - run: gem install kamal
 
       - run: curl -sfS https://dotenvx.sh/install.sh | sh
-      - run: dotenvx run -- kamal deploy
+      - run: dotenvx run -- kamal deploy --verbose
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
