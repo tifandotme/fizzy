@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # A sample pre-deploy hook
 #
@@ -14,14 +14,14 @@
 # KAMAL_ROLES (if set)
 # KAMAL_DESTINATION (if set)
 
+echo "Setting up deployment environment..."
+
 # Only run setup for production deployments
 if [ "$KAMAL_COMMAND" = "rollback" ] || [ "$KAMAL_DESTINATION" != "production" ]; then
   exit 0
 fi
 
 set -e
-
-echo "Setting up deployment environment..."
 
 # Add deploy user to docker group if not already
 if ! groups | grep -q docker; then
