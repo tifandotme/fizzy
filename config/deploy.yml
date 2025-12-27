@@ -1,6 +1,6 @@
 # Name of this app
 service: fizzy
-image: ghcr.io/tifandotme/fizzy
+image: tifandotme/fizzy
 
 #-- About your deployment --#
 
