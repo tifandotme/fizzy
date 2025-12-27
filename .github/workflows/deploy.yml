@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          version: latest
+          ping: box.javanese-pound.ts.net
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: gem install kamal
+
+      - run: curl -sfS https://dotenvx.sh/install.sh | sh
+      - run: dotenvx run -- kamal deploy
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
