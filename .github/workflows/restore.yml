@@ -45,7 +45,7 @@ jobs:
 
           # 3. Sync to server
           echo "Uploading to server..."
-          rsync -avz -e "ssh" ./$RESTORE_DIR/ eddies@box.javanese-pound.ts.net:/home/eddies/fizzy-storage
+          rsync -avz -e "ssh" ./$RESTORE_DIR/ eddies@box.javanese-pound.ts.net:/home/eddies
 
           echo "✓ Restore completed from: $GCS_BUCKET/$FOLDER_NAME"
 
