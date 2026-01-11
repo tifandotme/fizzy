@@ -1,0 +1,82 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_cert:
+        description: "Generate new certificate"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - uses: ./.github/actions/deploy-infra-setup
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+
+      - name: Download existing certificate
+        if: ${{ !inputs.new_cert }}
+        run: |
+          mkdir -p ./letsencrypt/live/fizzy.tifan.me
+          scp -r eddies@box.javanese-pound.ts.net:/home/eddies/.kamal/proxy/apps-config/fizzy/tls/web/cert.pem ./letsencrypt/live/fizzy.tifan.me/fullchain.pem
+          scp -r eddies@box.javanese-pound.ts.net:/home/eddies/.kamal/proxy/apps-config/fizzy/tls/web/key.pem ./letsencrypt/live/fizzy.tifan.me/privkey.pem
+
+      - name: Generate new certificate
+        if: ${{ inputs.new_cert }}
+        run: |
+          mkdir -p ./certbot
+          cat <<EOF > ./certbot/cloudflare.ini
+          dns_cloudflare_api_token = "$(dotenvx get CLOUDFLARE_API_TOKEN)"
+          EOF
+          chmod 600 ./certbot/cloudflare.ini
+
+          docker run --rm \
+            -v "$(pwd)"/letsencrypt:/etc/letsencrypt \
+            -v "$(pwd)"/letsencrypt-logs:/var/log/letsencrypt \
+            -v "$(pwd)"/certbot/cloudflare.ini:/root/.config/certbot/cloudflare.ini \
+            certbot/dns-cloudflare \
+            certonly \
+            --dns-cloudflare \
+            --dns-cloudflare-credentials /root/.config/certbot/cloudflare.ini \
+            --dns-cloudflare-propagation-seconds 20 \
+            --non-interactive \
+            --agree-tos \
+            --email tifan@proton.me \
+            -d fizzy.tifan.me
+
+          sudo chown -R "$USER" letsencrypt
+
+      - name: Set environment variables
+        run: |
+          git remote add upstream https://github.com/basecamp/fizzy || true
+          git fetch upstream --tags
+          LATEST_TAG=$(git describe --tags --abbrev=0 upstream/HEAD)
+          HASH="$(echo "$LATEST_TAG" | cut -d'@' -f2)"
+          DOCKER_TAG="sha-$HASH"
+          VERSION_TAG="$HASH"
+          echo "DOCKER_TAG=$DOCKER_TAG" >> "$GITHUB_ENV"
+          echo "VERSION_TAG=$VERSION_TAG" >> "$GITHUB_ENV"
+          echo "Using latest tag: $LATEST_TAG, docker tag: $DOCKER_TAG, version: $VERSION_TAG"
+
+      - name: Update Dockerfile with latest tag
+        run: |
+          sed -i "s|FROM ghcr.io/basecamp/fizzy:main|FROM ghcr.io/basecamp/fizzy:$DOCKER_TAG|" Dockerfile
+
+      - name: Deploy with Kamal
+        run: |
+          SSL_CERTIFICATE_PEM="$(cat letsencrypt/live/fizzy.tifan.me/fullchain.pem)"
+          export SSL_CERTIFICATE_PEM
+          SSL_PRIVATE_KEY_PEM="$(cat letsencrypt/live/fizzy.tifan.me/privkey.pem)"
+          export SSL_PRIVATE_KEY_PEM
+
+          dotenvx run -- kamal deploy --verbose --version "$VERSION_TAG"

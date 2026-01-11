@@ -1,0 +1,59 @@
+name: Restore from GCS
+
+on:
+  workflow_dispatch:
+    inputs:
+      folder_name:
+        description: "The folder name in the GCS bucket to restore from (e.g., 20231001-190000)"
+        required: true
+        type: string
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+      GCS_BUCKET: "gs://fizzy-backups-neo-fizzy" # terraform output bucket_name
+
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - uses: ./.github/actions/backup-infra-setup
+        id: infra
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+
+      - run: kamal app stop
+
+      - name: Perform Restore
+        run: |
+          FOLDER_NAME="${{ inputs.folder_name }}"
+          RESTORE_DIR="fizzy-storage-restore"
+
+          echo "=== Starting Restore from: $GCS_BUCKET/$FOLDER_NAME ==="
+
+          # 1. Download data from GCS to runner
+          echo "Downloading data from GCS..."
+          mkdir -p ./$RESTORE_DIR
+          gsutil -m rsync -r "$GCS_BUCKET/$FOLDER_NAME" ./$RESTORE_DIR
+
+          # 2. Sync to server
+          echo "Uploading to server..."
+          rsync -avz -e "ssh" ./$RESTORE_DIR/ eddies@box.javanese-pound.ts.net:/home/eddies/fizzy-storage
+
+          echo "✓ Restore completed from: $GCS_BUCKET/$FOLDER_NAME"
+
+      - name: Start Application
+        if: always() # Ensure app restarts even if restore fails
+        run: |
+          VERSION="${{ steps.infra.outputs.sha }}"
+
+          if [ -n "$VERSION" ]; then
+            echo "Restarting specific version: $VERSION"
+            kamal app start --version="$VERSION"
+          else
+            echo "Restarting default version..."
+            kamal app start
+          fi
