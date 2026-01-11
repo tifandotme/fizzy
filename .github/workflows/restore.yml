@@ -20,12 +20,11 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - uses: ./.github/actions/backup-infra-setup
-        id: infra
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
-      - run: kamal app stop
+      - run: kamal app maintenance --message "Restore in progress"
 
       - name: Perform Restore
         run: |
@@ -50,13 +49,4 @@ jobs:
 
       - name: Start Application
         if: always() # Ensure app restarts even if restore fails
-        run: |
-          VERSION="${{ steps.infra.outputs.sha }}"
-
-          if [ -n "$VERSION" ]; then
-            echo "Restarting specific version: $VERSION"
-            kamal app start --version="$VERSION"
-          else
-            echo "Restarting default version..."
-            kamal app start
-          fi
+        run: kamal app live

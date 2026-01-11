@@ -9,11 +9,6 @@ inputs:
     description: "Tailscale OAuth secret"
     required: true
 
-outputs:
-  sha:
-    description: "Captured app version SHA"
-    value: ${{ steps.version.outputs.sha }}
-
 runs:
   using: "composite"
   steps:
@@ -56,20 +51,3 @@ runs:
         credentials_json: "${{ steps.secrets.outputs.credentials_json }}"
 
     - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
-
-    - name: Capture Current Version
-      id: version
-      run: |
-        # Get the running version so we can restart the exact same container
-        OUTPUT=$(kamal app version)
-
-        # Extract the SHA (assuming the last line containing a 7-char hash is the version)
-        SHA=$(echo "$OUTPUT" | grep -oE '[0-9a-f]{7}' | tail -n 1)
-
-        if [ -z "$SHA" ]; then
-          echo "::warning::Could not detect running version. Will attempt default start."
-        else
-          echo "Detected version: $SHA"
-          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-        fi
-      shell: bash
