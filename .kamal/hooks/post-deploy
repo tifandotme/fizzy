@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "Deployed $KAMAL_VERSION in $KAMAL_RUNTIME seconds"
