@@ -16,10 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - uses: ./.github/actions/backup-infra-setup
+      - uses: ./.github/actions/infra-setup
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+
+      - uses: ./.github/actions/gcs-setup
 
       - run: kamal app maintenance --message "Backup in progress"
 
